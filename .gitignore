@@ -1,9 +1,15 @@
 .DS_Store
 node_modules
+<<<<<<< HEAD
 dist_electron
 /dist
 /node_modules/
 /dist_electron/
+=======
+/dist
+/node_modules/
+
+>>>>>>> 86a55756aac07eeb088f566bc43e1e5953a8f1f6
 # local env files
 .env.local
 .env.*.local

@@ -6,7 +6,10 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+<<<<<<< HEAD
     "publish": "vue-cli-service electron:build --win --x64 -p always",
+=======
+>>>>>>> 86a55756aac07eeb088f566bc43e1e5953a8f1f6
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
@@ -18,7 +21,10 @@
     "cnpm": "^7.1.1",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.0",
+<<<<<<< HEAD
     "electron-updater": "^5.0.1",
+=======
+>>>>>>> 86a55756aac07eeb088f566bc43e1e5953a8f1f6
     "element-plus": "^2.1.2",
     "fs-extra": "^10.0.1",
     "lodash-id": "^0.14.1",
