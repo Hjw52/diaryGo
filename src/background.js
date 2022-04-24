@@ -1,13 +1,12 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Tray, Menu, MenuItem, shell, globalShortcut, ipcMain} from 'electron'
+import { app, protocol, BrowserWindow, Tray, Menu, MenuItem, shell, globalShortcut, ipcMain,
+} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { initExtra } from "@/utils/backgroundExtra";
 import path from 'path'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 import { autoUpdater } from 'electron-updater';
-
-import pkg from '../package.json'
 
 let tray = null
 let win;
@@ -23,12 +22,10 @@ async function createWindow() {
     width: 400,
     height: 600,
     frame:false,
-   // skipTaskbar: true,
     titleBarStyle: 'hidden',
     autoHideMenuBar: true,
     transparent: true,
     backgroundColor: '#00000000',
-    //backgroundColor: '#00000080',
     icon: path.join(__static,'favicon.ico'),
     webPreferences: {
        nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
@@ -37,17 +34,50 @@ async function createWindow() {
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
-    autoUpdater.checkForUpdatesAndNotify()
+    autoUpdater.checkForUpdatesAndNotify().then(info=>{
+      sendStatusToWindow('autoUpdater-success',JSON.stringify(info))
+    }).catch(err=>{
+      sendStatusToWindow('autoUpdater-error:',JSON.stringify(err))
+    })
   }
- // win.flashFrame(true)
 }
+
+function sendStatusToWindow(text){
+  win.webContents.send('message',text)
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+})
+
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.');
+})
+
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.');
+})
+
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err);
+})
+
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  sendStatusToWindow(log_message);
+})
+
+autoUpdater.on('update-downloaded', (info) => {
+  sendStatusToWindow('Update downloaded');
+});
 
 function getOpenAtLogin(){
   if(app.isPackaged){

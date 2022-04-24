@@ -44,10 +44,7 @@ module.exports = defineConfig({
           createStartMenuShortcut: true,// 创建开始菜单图标
           shortcutName: "diaryGo",
         },
-<<<<<<< HEAD
         publish: ['github']
-=======
->>>>>>> 86a55756aac07eeb088f566bc43e1e5953a8f1f6
       },
       nodeIntegration: true
     }

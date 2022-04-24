@@ -29,6 +29,10 @@ export default {
     const lock = ref(false)
     const appName = ref(pkg.name)
     const colorBg = ref('#45494c')
+    ipcRenderer.on('message',(event,text)=>{
+      console.log(text)
+    })
+
     const hide = ()=>{
       ipcRenderer.invoke("hideWindow")
     }
